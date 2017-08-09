@@ -174,7 +174,7 @@
 </template>
 
 <script>
-  var FIREBALL_SIZE = 22;
+  var FIRE_BALL_SIZE = 22;
   var WIZARD_SPEED = 3;
   var WIZARD_WIDTH = 70;
 
@@ -191,7 +191,7 @@
   }
 
   function getWizardY(height) {
-    return height / 2;
+    return height * 2 / 3 - getWizardHeight();
   }
 </script>
 <script src="./js/game.js"></script>
