@@ -1,11 +1,48 @@
 'use strict';
 
-// глобальному объекту window присваиваем новое свойство — функцию
-// передаём в функцию три параметра:
-// объект канваса, массив имён, массив времени
+var drawFigure = {
+  cloud: function (ctx, x, y, width, height, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, width, height, color);
+  },
+  stroke: function (ctx, x, y, width, height, color) {
+    ctx.fillStyle = color;
+    ctx.strokeRect(x, y, width, height, color);
+  },
+  text: function (ctx, color, name, width, height) {
+    ctx.fillStyle = color;
+    ctx.fillText(name, width, height);
+  }
+};
+
+var getFontStyle = function (ctx, color, font) {
+  ctx.fillStyle = color;
+  ctx.font = font;
+};
+
+// функция переноса текст
+var breakDownText = function (ctx, text, x, y, maxWidth, lineHeight) { // принимает на вход наш контекст канваса, нужный текст, положение на оси х и у, максимальную длину на которой он будет отображаться без переноса и высоту строки
+  var words = text.split(' '); // разбиваем нашу строку по пробелам
+  var line = ''; // задаём пустую строку в которую будем всё потом передавать
+
+  words.forEach(function (element) { // проходимся циклом по нашему массиву слов
+    var textLine = line + element + ' '; // формируем строку которая будет выводить наш текст. Пустая строка для того, чтобы расставить пробелы после наших слов
+    var textWidth = ctx.measureText(textLine).width; // метод проверяет ширину текста перед выводом на поле
+
+    if (textWidth > maxWidth) { // если ширина текста больше чем наше максимальное значение
+      ctx.fillText(line, x, y); // то мы выводим наш текст
+      line = element + ' '; // присваиваем нашей пустой строке полученное слово с пробелом
+      y += lineHeight; // выводим на оси Y его, который учитывает нашу высоту строки и изначальное положение на оси У
+    } else {
+      line = textLine; // если меньше, то мы просто присваиваем нашей пустой строке наш текст
+    }
+  });
+
+  ctx.fillText(line, x, y); // выводим в итоге наш текст
+};
+
 window.renderStatistics = function (ctx, names, times) {
 
-  // Создаём объект гистограммы с свойствами
   var gistogram = {
     WIDTH: 40, // Ширина колонки (задана в ТЗ)
     HEIGHT: 150, // Высота гистограммы (задана в ТЗ)
@@ -18,60 +55,54 @@ window.renderStatistics = function (ctx, names, times) {
     MAX: -1, // максимальное значение рейтинга до изменений
   };
 
+  var cloud = {
+    AXIS_X: 100,
+    AXIS_Y: 10,
+    WIDTH: 420,
+    HEIGHT: 270,
+    SHADOW: 20,
+    SHADOW_COLOR: 'rgba(0, 0, 0, 0.7)',
+    COLOR: 'rgba(255, 255, 255, 1)',
+  };
 
-  // Тень
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'; // создаём чёрную заливку с прозрачностью 0.7
-  ctx.fillRect(110, 20, 420, 270); // Рисуем прямоугольник с положением на оси Х 110, У 20.
-  // Ширина прямоугольника 420пх, выоста 270пх
+  var text = {
+    COLOR: 'rgba(0, 0, 0, 1)',
+    FONTS_STYLE: '16px PT Mono',
+    DESCRIPTION: 'Ура, вы победили! Список результатов:',
+    AXIS_X: 140,
+    AXIS_Y: 40,
+    MAX_WIDTH: 200, // потому что ширина у нас 300 + 2 осттупа по 50пх
+    LINE_HEIGHT: 18
+  };
+
+  drawFigure.cloud(ctx, cloud.AXIS_X, cloud.SHADOW, cloud.WIDTH, cloud.HEIGHT, cloud.SHADOW_COLOR);
 
   // Облачко
-  ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // создаём белую заливку с прозрачностью 1
-  ctx.strokeRect(100, 10, 420, 270); // Рисуем обводку прямоугольника с положением на оси Х 100, У 10.
-  // Ширина прямоугольника 420пх, выоста 270пх
-  ctx.fillRect(100, 10, 420, 270); // // Рисуем белый прямоугольник с положением на оси Х 100, У 10.
-  // Ширина прямоугольника 420пх, выоста 270пх
+  drawFigure.stroke(ctx, cloud.AXIS_X, cloud.AXIS_Y, cloud.WIDTH, cloud.HEIGHT, cloud.COLOR); //
+  drawFigure.cloud(ctx, cloud.AXIS_X, cloud.AXIS_Y, cloud.WIDTH, cloud.HEIGHT, cloud.COLOR);
 
-  ctx.fillStyle = 'rgba(0, 0, 0, 1)'; // создаём чёрную заливку с прозрачностью 1
-  ctx.font = '16px PT Mono'; // задаём размер шрифта и шрифт
+  getFontStyle(ctx, text.COLOR, text.FONTS_STYLE);
 
-  ctx.fillText('Ура, вы победили!', 120, 40); // выводим текст с положением по оси Х 120 и У 40
-  ctx.fillText('Список результатов:', 120, 60); // выводим текст с положением по оси Х 120 и У 60
+  breakDownText(ctx, text.DESCRIPTION, text.AXIS_X, text.AXIS_Y, text.MAX_WIDTH, text.LINE_HEIGHT);
 
-  gistogram.MAX = Math.max.apply(null, times); // находим максимальное число в массиве и переопределяем переменную
-  // Используем для этого функцию Math.max и вызываем её с помощью метода apply
-  // в apply передаём первым параметром значение this (у нас оно будет null), а вторым — перебираемый нами массив
+  gistogram.MAX = Math.max.apply(null, times);
 
-  var step = gistogram.HEIGHT / gistogram.MAX; // Грубо говоря, находим 1% нашей гистограммы
-  // получим в итоге чо то типа px / second
+  var step = gistogram.HEIGHT / gistogram.MAX;
 
-  // Создаём функцию которая будет генерировать разные оттенки синего цвета
   var getRandomBlueColor = function () {
     return 'rgba(0, 76, 255, ' + (Math.random() * 0.9 + 0.1) + ')';
-    // функция возвращает строку в которой мы передаём rgba параметр синего цвета. С помощью Math.random мы как раз таки генерируем различную насыщенность синего
-    // чтобы избежать значение альфа-канала больше 1 и меньше 0, то мы умножаем получившуюся цифру на 0.9 и прибавляем к ней 0.1.
-    // Таким образом мы всегда получим 0 за счёт прибавления 0.1 (0 + 0.1) и не получим больше 1, так как умножаем на 0.9 (1 * 0.9 = 0.9). Math.random ограничен от 0 до 1 (не включая 1).
   };
 
-  // Рисуем наши гистограммы
-  var getStatsBar = function (time, name, j) { // передаём в функцию время игрока, имя игрока и его индекс
-    ctx.fillStyle = name === 'Вы' ? gistogram.PLAYER_COLOR : getRandomBlueColor(); // задаём цвет для нашей гистограмы. Он будет зависеть от имени игрока. Если это игрок «Вы», то столбец будет красного цвета, если нет, то вызывается функция, которая будет генерировать случайный синий оттенок столбца
-    ctx.fillRect(gistogram.AXIS_X + (gistogram.INDENT_X * j), gistogram.AXIS_Y, gistogram.WIDTH, (time * -step)); // отрисовываем наш столбец. Первый параметр — положение на оси X, который мы складываем с расстоянием между столбцами по оси Х умноженное на индекс элемента.
-    // параметр У статичен в данном случае
-    // Ширина столбца так же всегда статична
-    // высота рассчитывается по пропорции. Я хз как её изобразить, но в общем мы умножаем время (секунды) на наш step (который у нас как раз является условным «1%» высоты. В итоге такого умножения наши секунды сокращаются и мы получаем высотку столбца в пикселях. Отрицательную потому что растёт вверх)
+  var getStatsBar = function (time, name, j) {
+    drawFigure.cloud(ctx, gistogram.AXIS_X + (gistogram.INDENT_X * j), gistogram.AXIS_Y, gistogram.WIDTH, (time * -step), name === 'Вы' ? gistogram.PLAYER_COLOR : getRandomBlueColor());
 
-    ctx.fillStyle = gistogram.TEXT_COLOR; // задаём цвет текста для имён
-    ctx.fillText(name, gistogram.AXIS_X + (gistogram.INDENT_X * j), gistogram.AXIS_Y + gistogram.INDENT_Y); // первый параметр у нас пришедшее из цикла имя, которое и будет выводится (всего 4). Второй параметр это положение имени по оси Х — задаём ему те же параметры, как и столбцу, чтобы стояли ровно. Третий параметр — положение текста по оси У.
-    // начальное положение задаётся при помощи начальной положения на оси У к которому мы прибавляем отступы между столбацми
+    drawFigure.text(ctx, gistogram.TEXT_COLOR, name, gistogram.AXIS_X + (gistogram.INDENT_X * j), gistogram.AXIS_Y + gistogram.INDENT_Y);
 
-    ctx.fillStyle = gistogram.TEXT_COLOR; // задаём цвет текста для рейтинга
-    ctx.fillText(Math.floor(time), gistogram.AXIS_X + (gistogram.INDENT_X * j), gistogram.AXIS_Y - (time * step) - gistogram.INDENT_Y); // первыйм делом округлим наше время до целого числа
-    // затем найдём положение на оси Х — задаём ему те же параметры, как и столбцу, чтобы стояли ровно
-    // затем находим положение на осикУ: начальное положение задаётся при помощи начальной положения на оси У из которого мы вычтем наши выосты стобцов дабы они не наложились друг на друга, а затем вычтем отступ по оси У чтобы у нас было небольшое расстояние между столбцом и временем
+    drawFigure.text(ctx, gistogram.TEXT_COLOR, Math.floor(time), gistogram.AXIS_X + (gistogram.INDENT_X * j), gistogram.AXIS_Y - (time * step) - gistogram.INDENT_Y);
+
   };
 
-  // перебираем наш массив со временем с помощью цикла
-  times.forEach(function (time, j) { // форич принимаем на вход два аргумента — первый это наш какой-либо элемент (время) и второе — его идекс
-    getStatsBar(time, names[j], j); // в самом теле фицла мы вызываем функцию отрисовки наших столбцов и передаём туда параметры времени, определённого имени игрока и индекс в массиве
+  times.forEach(function (time, j) {
+    getStatsBar(time, names[j], j);
   });
 };
