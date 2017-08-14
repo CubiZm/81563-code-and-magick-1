@@ -60,7 +60,8 @@ window.renderStatistics = function (ctx, names, times) {
     AXIS_Y: 10,
     WIDTH: 420,
     HEIGHT: 270,
-    SHADOW: 20,
+    SHADOW_X: 110,
+    SHADOW_Y: 20,
     SHADOW_COLOR: 'rgba(0, 0, 0, 0.7)',
     COLOR: 'rgba(255, 255, 255, 1)',
   };
@@ -75,7 +76,7 @@ window.renderStatistics = function (ctx, names, times) {
     LINE_HEIGHT: 18
   };
 
-  drawFigure.cloud(ctx, cloud.AXIS_X, cloud.SHADOW, cloud.WIDTH, cloud.HEIGHT, cloud.SHADOW_COLOR);
+  drawFigure.cloud(ctx, cloud.SHADOW_X, cloud.SHADOW_Y, cloud.WIDTH, cloud.HEIGHT, cloud.SHADOW_COLOR);
 
   // Облачко
   drawFigure.stroke(ctx, cloud.AXIS_X, cloud.AXIS_Y, cloud.WIDTH, cloud.HEIGHT, cloud.COLOR); //
