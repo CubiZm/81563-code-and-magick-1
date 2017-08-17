@@ -90,12 +90,19 @@ window.renderStatistics = function (ctx, names, times) {
 
   var step = gistogram.HEIGHT / gistogram.MAX;
 
+  var getRandomNumber = function (min, max) {
+    return Math.random() * max + min;
+  };
+
   var getRandomBlueColor = function () {
-    return 'rgba(0, 76, 255, ' + (Math.random() * 0.9 + 0.1) + ')';
+    return 'rgba(0, 76, 255, ' + getRandomNumber(0.1, 1) + ')';
   };
 
   var getStatsBar = function (time, name, j) {
-    drawFigure.cloud(ctx, gistogram.AXIS_X + (gistogram.INDENT_X * j), gistogram.AXIS_Y, gistogram.WIDTH, (time * -step), name === 'Вы' ? gistogram.PLAYER_COLOR : getRandomBlueColor());
+    drawFigure.cloud(ctx, gistogram.AXIS_X + (gistogram.INDENT_X * j), gistogram.AXIS_Y, gistogram.WIDTH, (time * -step),
+        name === 'Вы' ?
+          gistogram.PLAYER_COLOR :
+          getRandomBlueColor());
 
     drawFigure.text(ctx, gistogram.TEXT_COLOR, name, gistogram.AXIS_X + (gistogram.INDENT_X * j), gistogram.AXIS_Y + gistogram.INDENT_Y);
 

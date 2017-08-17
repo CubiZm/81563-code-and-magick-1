@@ -51,12 +51,16 @@ var WizardsParams = {
 var setup = document.querySelector('.setup');
 var setupList = document.querySelector('.setup-similar-list');
 
-var getRandomNumber = function (min, max) { // генерирует рандомное число в различном диапозне
-  return Math.floor(min + Math.random() * (max + 1 - min));
+var getRandomNumber = function (min, max) {
+  return Math.random() * max + min;
+};
+
+var getRandomFloorNumber = function (min, max) { // генерирует рандомное число в различном диапозне
+  return Math.floor(getRandomNumber(min, max));
 };
 
 var getRandomElement = function (array) { // получает на вход какой-либо массив с данными (имьфамиль, глаза, мантии и тыды)
-  var index = getRandomNumber(0, array.length - 1);
+  var index = getRandomFloorNumber(0, array.length - 1);
   var element = array[index]; // получаем наш элемент с каким-либо рандомным индексом из массива
 
   return element;
