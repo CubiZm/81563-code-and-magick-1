@@ -2,7 +2,7 @@
 
 var NUMBER_WIZARD = 4;
 
-var userNames = [
+var USER_NAMES = [
   'Иван',
   'Хуан Себастьян',
   'Мария',
@@ -13,7 +13,7 @@ var userNames = [
   'Вашингтон'
 ];
 
-var userLastNames = [
+var USER_LAST_NAMES = [
   'да Марья',
   'Верон',
   'Мирабелла',
@@ -24,7 +24,7 @@ var userLastNames = [
   'Ирвинг'
 ];
 
-var userCoatColors = [
+var USER_COAT_COLOR = [
   'rgb(101, 137, 164)',
   'rgb(241, 43, 107)',
   'rgb(146, 100, 161)',
@@ -33,7 +33,7 @@ var userCoatColors = [
   'rgb(0, 0, 0)'
 ];
 
-var userEyesColors = [
+var USER_EYES_COLOR = [
   'black',
   'red',
   'blue',
@@ -42,10 +42,10 @@ var userEyesColors = [
 ];
 
 var WizardsParams = {
-  name: userNames,
-  lastName: userLastNames,
-  coatColor: userCoatColors, // цвет мантии
-  eyesColor: userEyesColors // цвет глаз
+  name: USER_NAMES,
+  lastName: USER_LAST_NAMES,
+  coatColor: USER_COAT_COLOR, // цвет мантии
+  eyesColor: USER_EYES_COLOR // цвет глаз
 };
 
 var setup = document.querySelector('.setup');
