@@ -52,7 +52,6 @@ window.renderStatistics = function (ctx, names, times) {
     INDENT_X: 90, // Отступ по оси Х. По заданию 50, но мы учитываем ещё и ширину колонки, так как шаг начинается с крайнего левого угла СТОБЛЦА, а не с его конца. В итоге ширина стобца 40 + 50 из задания и дадут нам 90
     PLAYER_COLOR: 'rgba(255, 0, 0, 1)', // цвет колонки у игрока
     TEXT_COLOR: 'rgba(0, 0, 0, 1)', // цвет текста
-    MAX: -1, // максимальное значение рейтинга до изменений
   };
 
   var cloud = {
@@ -76,6 +75,8 @@ window.renderStatistics = function (ctx, names, times) {
     LINE_HEIGHT: 18
   };
 
+  var maxGist = -1; // максимальное значение рейтинга до изменений
+
   drawFigure.cloud(ctx, cloud.SHADOW_X, cloud.SHADOW_Y, cloud.WIDTH, cloud.HEIGHT, cloud.SHADOW_COLOR);
 
   // Облачко
@@ -86,9 +87,9 @@ window.renderStatistics = function (ctx, names, times) {
 
   breakDownText(ctx, text.DESCRIPTION, text.AXIS_X, text.AXIS_Y, text.MAX_WIDTH, text.LINE_HEIGHT);
 
-  gistogram.MAX = Math.max.apply(null, times);
+  maxGist = Math.max.apply(null, times);
 
-  var step = gistogram.HEIGHT / gistogram.MAX;
+  var step = gistogram.HEIGHT / maxGist;
 
   var getRandomNumber = function (min, max) {
     return Math.random() * max + min;

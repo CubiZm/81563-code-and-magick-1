@@ -83,7 +83,7 @@ var getArrayWizard = function (numberWizard) {
 // создаём мага —
 var createWizardNode = function (wizard) { // передаём сюда объект мага
   var wizardTemplate = document.querySelector('#similar-wizard-template').content;
-  var personElement = wizardTemplate.cloneNode(true); // овершаем глубокое клонирование вместе со всеми потомками
+  var wizardElement = wizardTemplate.cloneNode(true); // овершаем глубокое клонирование вместе со всеми потомками
   var wizardLabel = wizardTemplate.querySelector('.setup-similar-label');
   var wizardCoat = wizardTemplate.querySelector('.wizard-coat');
   var wizardEyes = wizardTemplate.querySelector('.wizard-eyes');
@@ -92,7 +92,7 @@ var createWizardNode = function (wizard) { // передаём сюда объе
   wizardCoat.style.fill = wizard.coatColor; // цвет мантии
   wizardEyes.style.fill = wizard.eyesColor; // цвет глаз
 
-  return personElement; // возвращает разметку мага
+  return wizardElement; // возвращает разметку мага
 };
 
 var getWizardsNode = function (array) { // принимает на вход массив волшебников (который содержит объекты волшебников)
