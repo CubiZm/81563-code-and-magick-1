@@ -2,50 +2,42 @@
 
 var NUMBER_WIZARD = 4;
 
-var USER_NAMES = [
-  'Иван',
-  'Хуан Себастьян',
-  'Мария',
-  'Кристоф',
-  'Виктор',
-  'Юлия',
-  'Люпита',
-  'Вашингтон'
-];
-
-var USER_LAST_NAMES = [
-  'да Марья',
-  'Верон',
-  'Мирабелла',
-  'Вальц',
-  'Онопко',
-  'Топольницкая',
-  'Нионго',
-  'Ирвинг'
-];
-
-var USER_COAT_COLOR = [
-  'rgb(101, 137, 164)',
-  'rgb(241, 43, 107)',
-  'rgb(146, 100, 161)',
-  'rgb(56, 159, 117)',
-  'rgb(215, 210, 55)',
-  'rgb(0, 0, 0)'
-];
-
-var USER_EYES_COLOR = [
-  'black',
-  'red',
-  'blue',
-  'yellow',
-  'green'
-];
-
 var WizardsParams = {
-  name: USER_NAMES,
-  lastName: USER_LAST_NAMES,
-  coatColor: USER_COAT_COLOR, // цвет мантии
-  eyesColor: USER_EYES_COLOR // цвет глаз
+  name: [
+    'Иван',
+    'Хуан Себастьян',
+    'Мария',
+    'Кристоф',
+    'Виктор',
+    'Юлия',
+    'Люпита',
+    'Вашингтон'
+  ],
+  lastName: [
+    'да Марья',
+    'Верон',
+    'Мирабелла',
+    'Вальц',
+    'Онопко',
+    'Топольницкая',
+    'Нионго',
+    'Ирвинг'
+  ],
+  coatColor: [
+    'rgb(101, 137, 164)',
+    'rgb(241, 43, 107)',
+    'rgb(146, 100, 161)',
+    'rgb(56, 159, 117)',
+    'rgb(215, 210, 55)',
+    'rgb(0, 0, 0)'
+  ],
+  eyesColor: [
+    'black',
+    'red',
+    'blue',
+    'yellow',
+    'green'
+  ]
 };
 
 var setup = document.querySelector('.setup');
@@ -55,12 +47,8 @@ var getRandomNumber = function (min, max) {
   return Math.random() * max + min;
 };
 
-var getRandomFloorNumber = function (min, max) { // генерирует рандомное число в различном диапозне
-  return Math.floor(getRandomNumber(min, max));
-};
-
 var getRandomElement = function (array) { // получает на вход какой-либо массив с данными (имьфамиль, глаза, мантии и тыды)
-  var index = getRandomFloorNumber(0, array.length - 1);
+  var index = Math.floor(getRandomNumber(0, array.length - 1));
   var element = array[index]; // получаем наш элемент с каким-либо рандомным индексом из массива
 
   return element;
@@ -107,7 +95,7 @@ var createWizardNode = function (wizard) { // передаём сюда объе
   return personElement; // возвращает разметку мага
 };
 
-var getWizard = function (array) { // принимает на вход массив волшебников (который содержит объекты волшебников)
+var getWizardsNode = function (array) { // принимает на вход массив волшебников (который содержит объекты волшебников)
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < array.length; i++) {
@@ -116,11 +104,11 @@ var getWizard = function (array) { // принимает на вход масс�
   return fragment;
 };
 
+var wizardsArray = getArrayWizard(NUMBER_WIZARD);
+
+getWizardsNode(wizardsArray);
+
+setupList.appendChild(getWizardsNode(wizardsArray));
+
 setup.classList.remove('hidden');
 setup.querySelector('.setup-similar').classList.remove('hidden');
-
-var wizardArray = getArrayWizard(NUMBER_WIZARD);
-
-getWizard(wizardArray);
-
-setupList.appendChild(getWizard(wizardArray));
