@@ -49,10 +49,7 @@ var getRandomNumber = function (min, max) {
 
 var getRandomElement = function (array) { // получает на вход какой-либо массив с данными (имьфамиль, глаза, мантии и тыды)
   var index = Math.floor(getRandomNumber(0, array.length - 1));
-  var element = array[index]; // получаем наш элемент с каким-либо рандомным индексом из массива
-
-  return element;
-
+  return array[index];
 };
 
 var getRandomNames = function (name, lastName) {
@@ -70,7 +67,7 @@ var getObjWizard = function () { // передаём в мага имя, фам�
   return wizard;
 };
 
-var getArrayWizard = function (numberWizard) {
+var getWizardsArray = function (numberWizard) {
   var wizards = []; // создаём пустой массив куда будем складывать наши 4 объекта магов
 
   for (var j = 0; j < numberWizard; j++) {
@@ -98,13 +95,13 @@ var createWizardNode = function (wizard) { // передаём сюда объе
 var getWizardsNode = function (array) { // принимает на вход массив волшебников (который содержит объекты волшебников)
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < array.length; i++) {
-    fragment.appendChild(createWizardNode(array[i]));
-  }
+  array.forEach(function (element) {
+    fragment.appendChild(createWizardNode(element));
+  });
   return fragment;
 };
 
-var wizardsArray = getArrayWizard(NUMBER_WIZARD);
+var wizardsArray = getWizardsArray(NUMBER_WIZARD);
 
 getWizardsNode(wizardsArray);
 
