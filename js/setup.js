@@ -81,9 +81,9 @@ var getWizardsArray = function (numberWizard) {
 var createWizardNode = function (wizard) { // передаём сюда объект мага
   var wizardTemplate = document.querySelector('#similar-wizard-template').content;
   var wizardElement = wizardTemplate.cloneNode(true); // овершаем глубокое клонирование вместе со всеми потомками
-  var wizardLabel = wizardTemplate.querySelector('.setup-similar-label');
-  var wizardCoat = wizardTemplate.querySelector('.wizard-coat');
-  var wizardEyes = wizardTemplate.querySelector('.wizard-eyes');
+  var wizardLabel = wizardElement.querySelector('.setup-similar-label');
+  var wizardCoat = wizardElement.querySelector('.wizard-coat');
+  var wizardEyes = wizardElement.querySelector('.wizard-eyes');
 
   wizardLabel.textContent = wizard.name; // имя
   wizardCoat.style.fill = wizard.coatColor; // цвет мантии
@@ -102,8 +102,6 @@ var getWizardsNode = function (array) { // принимает на вход ма
 };
 
 var wizardsArray = getWizardsArray(NUMBER_WIZARD);
-
-getWizardsNode(wizardsArray);
 
 setupList.appendChild(getWizardsNode(wizardsArray));
 
