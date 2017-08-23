@@ -69,20 +69,48 @@ var colorFireball = document.querySelector('.setup-fireball-wrap');
 userName.minLength = 1;
 userName.maxLength = 50;
 
+/**
+ * Генерирует рандомное число в заданном диапозоне
+ * @param {number} min
+ * @param {number} max
+ *
+ * @return {number}
+ */
 var getRandomNumber = function (min, max) {
   return Math.random() * max + min;
 };
 
+/**
+ * Получает рандомный элемент из массива
+ * @param {Array} array
+ *
+ * @return {*}
+ */
 var getRandomElement = function (array) {
   var index = Math.floor(getRandomNumber(0, array.length - 1));
   return array[index];
 };
 
+/**
+ * Получает строку с именем и фамилией
+ * @param {Array} name
+ * @param {Array} lastName
+ *
+ * @return {string}
+ */
 var getRandomNames = function (name, lastName) {
   return getRandomElement(name) + ' ' + getRandomElement(lastName);
 };
 
-// получаем объект с магом
+/**
+ * Получает объект с магом
+ * @typedef {Object} wizard
+ * @property {string} name
+ * @property {string} coatColor
+ * @property {string} eyesColor
+ *
+ * @return {Object}
+  */
 var getObjWizard = function () {
   var wizard = { // создаём объект мага
     name: getRandomNames(WizardsParams.name, WizardsParams.lastName), // имя мага мостоит из имени и фамилии, складываем их вместе
@@ -93,6 +121,12 @@ var getObjWizard = function () {
   return wizard;
 };
 
+/**
+ * Создаёт массив с заданным количеством объектов
+ * @param {number} numberWizard
+ *
+ * @return {Array}
+ */
 var getWizardsArray = function (numberWizard) {
   var wizards = []; // создаём пустой массив куда будем складывать наши 4 объекта магов
 
@@ -103,25 +137,36 @@ var getWizardsArray = function (numberWizard) {
   return wizards;
 };
 
-// создаём мага —
-var createWizardNode = function (wizard) { // передаём сюда объект мага
+/**
+ * Создаёт HTML-разметку мага
+ * @param {Object} wizard
+ *
+ * @return {HTMLElement}
+ */
+var createWizardNode = function (wizard) {
   var wizardTemplate = document.querySelector('#similar-wizard-template').content;
-  var wizardElement = wizardTemplate.cloneNode(true); // овершаем глубокое клонирование вместе со всеми потомками
+  var wizardElement = wizardTemplate.cloneNode(true);
   var wizardLabel = wizardElement.querySelector('.setup-similar-label');
   var wizardCoat = wizardElement.querySelector('.wizard-coat');
   var wizardEyes = wizardElement.querySelector('.wizard-eyes');
 
-  wizardLabel.textContent = wizard.name; // имя
-  wizardCoat.style.fill = wizard.coatColor; // цвет мантии
-  wizardEyes.style.fill = wizard.eyesColor; // цвет глаз
+  wizardLabel.textContent = wizard.name;
+  wizardCoat.style.fill = wizard.coatColor;
+  wizardEyes.style.fill = wizard.eyesColor;
 
-  return wizardElement; // возвращает разметку мага
+  return wizardElement;
 };
 
-var getWizardsNode = function (array) {
+/**
+ *  Создаёт HTML-фрагмент пинов по шаблону
+ * @param {Array} wizardArray
+ *
+ * @return {HTMLElement}
+ */
+var getWizardsNode = function (wizardArray) {
   var fragment = document.createDocumentFragment();
 
-  array.forEach(function (element) {
+  wizardArray.forEach(function (element) {
     fragment.appendChild(createWizardNode(element));
   });
   return fragment;
