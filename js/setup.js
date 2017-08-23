@@ -62,8 +62,8 @@ var setupIcon = document.querySelector('.setup-open');
 var setupClose = document.querySelector('.setup-close');
 var userName = document.querySelector('.setup-user-name');
 
-var colorCoat = document.querySelector('#wizard-coat');
-var colorEyes = document.querySelector('#wizard-eyes');
+var colorCoat = document.querySelector('.wizard-coat');
+var colorEyes = document.querySelector('.wizard-eyes');
 var colorFireball = document.querySelector('.setup-fireball-wrap');
 
 userName.minLength = 1;
@@ -135,7 +135,7 @@ var getValid = function () {
     } else if (userName.validity.tooLong) {
       userName.setCustomValidity('Имя не должно превышать 50-ти букв');
     } else if (userName.validity.valueMissing) {
-      userName.setCustomValidity('Обязательное поле');
+      userName.setCustomValidity('Имя должно состоять минимум из 1-ой буквы');
     }
   } else {
     userName.setCustomValidity('');
@@ -150,7 +150,10 @@ var onElementKeydownClose = function (evt) {
   if (evt.target.className === 'setup-user-name') {
     return;
   }
-  if (evt.keyCode === keyCodes.ESC || evt.target.className === 'setup-close') {
+  if (evt.keyCode === keyCodes.ESC) {
+    setup.classList.add('hidden');
+  }
+  if (evt.keyCode === keyCodes.ENTER && evt.target.className === 'setup-close') {
     setup.classList.add('hidden');
   }
 };
