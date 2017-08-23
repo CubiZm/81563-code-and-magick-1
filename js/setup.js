@@ -2,6 +2,15 @@
 
 var NUMBER_WIZARD = 4;
 
+/**
+ * набор свойств для клавиш
+ * @enum {number} KeyCode
+ */
+var keyCodes = {
+  ESC: 27,
+  ENTER: 13
+};
+
 var WizardsParams = {
   name: [
     'Иван',
@@ -37,17 +46,34 @@ var WizardsParams = {
     'blue',
     'yellow',
     'green'
+  ],
+  fireballColor: [
+    '#ee4830',
+    '#30a8ee',
+    '#5ce6c0',
+    '#e848d5',
+    '#e6e848'
   ]
 };
 
 var setup = document.querySelector('.setup');
 var setupList = document.querySelector('.setup-similar-list');
+var setupIcon = document.querySelector('.setup-open');
+var setupClose = document.querySelector('.setup-close');
+var userName = document.querySelector('.setup-user-name');
+
+var colorCoat = document.querySelector('#wizard-coat');
+var colorEyes = document.querySelector('#wizard-eyes');
+var colorFireball = document.querySelector('.setup-fireball-wrap');
+
+userName.minLength = 1;
+userName.maxLength = 50;
 
 var getRandomNumber = function (min, max) {
   return Math.random() * max + min;
 };
 
-var getRandomElement = function (array) { // получает на вход какой-либо массив с данными (имьфамиль, глаза, мантии и тыды)
+var getRandomElement = function (array) {
   var index = Math.floor(getRandomNumber(0, array.length - 1));
   return array[index];
 };
@@ -57,7 +83,7 @@ var getRandomNames = function (name, lastName) {
 };
 
 // получаем объект с магом
-var getObjWizard = function () { // передаём в мага имя, фамилию, цвета мантии и глаз
+var getObjWizard = function () {
   var wizard = { // создаём объект мага
     name: getRandomNames(WizardsParams.name, WizardsParams.lastName), // имя мага мостоит из имени и фамилии, складываем их вместе
     coatColor: getRandomElement(WizardsParams.coatColor), // цвет мантии
@@ -92,7 +118,7 @@ var createWizardNode = function (wizard) { // передаём сюда объе
   return wizardElement; // возвращает разметку мага
 };
 
-var getWizardsNode = function (array) { // принимает на вход массив волшебников (который содержит объекты волшебников)
+var getWizardsNode = function (array) {
   var fragment = document.createDocumentFragment();
 
   array.forEach(function (element) {
@@ -101,9 +127,81 @@ var getWizardsNode = function (array) { // принимает на вход ма
   return fragment;
 };
 
+
+var getValid = function () {
+  if (!userName.validity.valid) {
+    if (userName.validity.tooShort) {
+      userName.setCustomValidity('Имя должно состоять минимум из 1-ой буквы');
+    } else if (userName.validity.tooLong) {
+      userName.setCustomValidity('Имя не должно превышать 50-ти букв');
+    } else if (userName.validity.valueMissing) {
+      userName.setCustomValidity('Обязательное поле');
+    }
+  } else {
+    userName.setCustomValidity('');
+  }
+};
+
+var onElementClickClose = function () {
+  setup.classList.add('hidden');
+};
+
+var onElementKeydownClose = function (evt) {
+  if (evt.target.className === 'setup-user-name') {
+    return;
+  }
+  if (evt.keyCode === keyCodes.ESC || evt.target.className === 'setup-close') {
+    setup.classList.add('hidden');
+  }
+};
+
+var onElementKeydownShow = function (evt) {
+  if (evt.keyCode === keyCodes.ENTER) {
+    setup.classList.remove('hidden');
+  }
+};
+
+var onElementClickShow = function () {
+  setup.classList.remove('hidden');
+};
+
+var initEventHandler = function () {
+  setupIcon.addEventListener('click', onElementClickShow);
+  setupIcon.addEventListener('keydown', onElementKeydownShow);
+  userName.addEventListener('focus', onElementKeydownClose, true);
+};
+
+var closeEventHandler = function () {
+  setupClose.addEventListener('click', onElementClickClose);
+  document.body.addEventListener('keydown', onElementKeydownClose);
+};
+
+var getRandomCoatColor = function () {
+  var color = getRandomElement(WizardsParams.coatColor);
+  colorCoat.style.fill = color;
+};
+
+var getRandomEyesColor = function () {
+  var color = getRandomElement(WizardsParams.eyesColor);
+  colorEyes.style.fill = color;
+};
+
+var getRandomFireballColor = function () {
+  var color = getRandomElement(WizardsParams.fireballColor);
+  colorFireball.style.backgroundColor = color;
+};
+
+initEventHandler();
+closeEventHandler();
+
+colorCoat.addEventListener('click', getRandomCoatColor);
+colorEyes.addEventListener('click', getRandomEyesColor);
+colorFireball.addEventListener('click', getRandomFireballColor);
+userName.addEventListener('invalid', getValid);
+
 var wizardsArray = getWizardsArray(NUMBER_WIZARD);
 
 setupList.appendChild(getWizardsNode(wizardsArray));
 
-setup.classList.remove('hidden');
+// setup.classList.remove('hidden');
 setup.querySelector('.setup-similar').classList.remove('hidden');
