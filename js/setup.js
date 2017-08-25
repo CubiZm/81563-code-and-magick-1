@@ -103,7 +103,6 @@ var getRandomNames = function (name, lastName) {
 };
 
 /**
- * Объявляет объект мага
  * @typedef {Object} Wizard
  * @property {string} name
  * @property {string} coatColor
