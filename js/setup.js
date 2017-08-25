@@ -103,14 +103,14 @@ var getRandomNames = function (name, lastName) {
 };
 
 /**
- * Получает объект с магом
- * @typedef {Object} wizard
+ * Объявляет объект мага
+ * @typedef {Object} Wizard
  * @property {string} name
  * @property {string} coatColor
  * @property {string} eyesColor
  *
- * @return {Object}
-  */
+*/
+
 var getObjWizard = function () {
   var wizard = { // создаём объект мага
     name: getRandomNames(WizardsParams.name, WizardsParams.lastName), // имя мага мостоит из имени и фамилии, складываем их вместе
@@ -195,10 +195,8 @@ var onElementKeydownClose = function (evt) {
   if (evt.target.className === 'setup-user-name') {
     return;
   }
-  if (evt.keyCode === keyCodes.ESC) {
-    setup.classList.add('hidden');
-  }
-  if (evt.keyCode === keyCodes.ENTER && evt.target.className === 'setup-close') {
+
+  if (evt.keyCode === keyCodes.ESC || evt.keyCode === keyCodes.ENTER && evt.target.className === 'setup-close') {
     setup.classList.add('hidden');
   }
 };
